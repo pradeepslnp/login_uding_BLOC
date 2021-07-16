@@ -65,30 +65,34 @@ class Login extends StatelessWidget {
   }
 
   Widget _usernamedFeild() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return TextFormField(
-        validator: (value) =>
-            state.idValidUsername ? null : ' username is too short',
-        onChanged: (value) => context.read<LoginBloc>().add(
-              LoginUseNameChanged(username: value),
-            ), // obscureText: true,
-        decoration: InputDecoration(
-          icon: Icon(Icons.person),
-          hintText: "Username",
-        ),
-      );
-    });
+    return BlocBuilder<LoginBloc, LoginState>(
+      builder: (context, state) {
+        return TextFormField(
+          validator: (value) =>
+              state.idValidUsername ? null : ' username is too short',
+          onChanged: (value) => context.read<LoginBloc>().add(
+                LoginUseNameChanged(username: value),
+              ), // obscureText: true,
+          decoration: InputDecoration(
+            icon: Icon(Icons.person),
+            hintText: "Username",
+          ),
+        );
+      },
+    );
   }
 
   Widget _loginButton() {
     return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
       return state.formStatus is FormSubmitting
           ? CircularProgressIndicator()
-          : ElevatedButton(onPressed: () {
-            if(_FormKey.currentState.validate()){
-              context.read<LoginBloc>().add(LoginSubmitted());
-            }
-          }, child: Text('Login'));
+          : ElevatedButton(
+              onPressed: () {
+                if (_FormKey.currentState.validate()) {
+                  context.read<LoginBloc>().add(LoginSubmitted());
+                }
+              },
+              child: Text('Login'));
     });
   }
 }
