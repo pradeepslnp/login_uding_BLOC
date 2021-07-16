@@ -1,8 +1,10 @@
 import 'package:login_using_bloc/auth/form_submission.dart';
 
 class LoginState {
-  final String? username;
-  final String? password;
+  final String username;
+  bool get idValidUsername=>username.length>3;
+  final String password;
+  bool get isValidPassword=>password.length >6;
   final FormSubmissionStatus formStatus;
   LoginState({
     this.username = '',
@@ -10,9 +12,9 @@ class LoginState {
     this.formStatus=const IntialFormStatus(),
   });
   LoginState copyWith({
-    String? username,
-    String? password,
-    FormSubmissionStatus? formStatus,
+    String username,
+    String password,
+    FormSubmissionStatus formStatus,
   }){
     return LoginState(
       username: username??this.username,

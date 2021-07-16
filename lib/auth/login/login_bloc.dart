@@ -1,11 +1,14 @@
-import 'package:bloc/bloc.dart';
-import 'package:login_using_bloc/auth/form_submission.dart';
-import 'package:login_using_bloc/auth/login/loginstate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'loginevent.dart';
+import '../auth_repo.dart';
+import '../form_submission.dart';
+import '../login/loginevent.dart';
+import '../login/loginstate.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc(LoginState initialState) : super(initialState);
+  final AuthRepository authRepo;
+
+  LoginBloc({ this.authRepo}) : super(LoginState());
 
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
@@ -15,6 +18,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield state.copyWith(password: event.password);
     } else if (event is LoginSubmitted) {
       yield state.copyWith(formStatus: FormSubmitting());
+      try {
+        await authRepo.login();
+        yield state.copyWith(formStatus: SubmissionSuccess());
+      } catch (e) {
+        yield state.copyWith(formStatus: SubmissionFailed(e));
+      }
     }
   }
 }
+
+ 
